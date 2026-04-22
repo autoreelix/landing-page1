@@ -254,14 +254,19 @@ export default function LandingPage() {
 
           {/* Beehiiv form */}
           <div className="mt-4">
-             <button
-              onClick={() => window.location.href =
+              <button
+             onClick={() => window.location.href = 
            "https://autoreelix.beehiiv.com"}
-             className="bg-black text-white px-6 py-3 rounded-lg
-           text-lg font-semibold w-full"
-            >
-             Join the Waitlist
-            </button>
+          className="w-full px-8 py-4 rounded-full text-sm 
+          tracking-widest font-semibold bg-gradient-to-r 
+          from-purple-500 via-blue-500 to-cyan-400 text-white 
+          shadow-[0_0_20px_rgba(124,77,255,0.6)] border 
+          border-white/20 hover:scale-105 
+          hover:shadow-[0_0_30px_rgba(124,77,255,0.9)] 
+          transition-all duration-300 animate-[pulse_2s_infinite]
+         >
+           GET EARLY ACCESS
+          </button>
             
              <p className="mt-2 text-[0.7rem]"> 
               No spam. Just launch updates. 
