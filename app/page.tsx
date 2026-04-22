@@ -253,37 +253,20 @@ export default function LandingPage() {
           </div>
 
           {/* Beehiiv form */}
-          <form
-            onSubmit={handleBeehiivSubmit}
-            className="mt-4 flex flex-col gap-3 rounded-2xl border border-slate-800/80 bg-slate-950/70 p-3 shadow-[0_0_40px_rgba(15,23,42,0.9)] backdrop-blur sm:flex-row sm:items-center sm:p-4"
-          >
-            <div className="flex-1">
-              <label
-                htmlFor="email"
-                className="text-[0.7rem] font-medium uppercase tracking-[0.2em] text-slate-400"
-              >
-                Get early access
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                placeholder="you@creatorstudio.com"
-                className="mt-1 w-full rounded-xl border border-slate-700/70 bg-slate-900/70 px-3 py-2 text-sm text-slate-50 outline-none ring-0 placeholder:text-slate-500 focus:border-fuchsia-400 focus:bg-slate-900 focus:ring-2 focus:ring-fuchsia-500/50"
-              />
-              <p className="mt-1 text-[0.7rem] text-slate-400">
-                No spam. Just launch updates, creator playbooks, and a front‑row
-                seat to the first live sessions.
-              </p>
-            </div>
-            <button
-              type="submit"
-              className="mt-2 w-full rounded-xl bg-gradient-to-r from-fuchsia-500 via-violet-500 to-cyan-400 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-black shadow-[0_0_40px_rgba(236,72,153,0.6)] hover:brightness-110 active:scale-95 transition sm:mt-6 sm:w-auto"
+          <div className="mt-4">
+             <button
+              onClick={() => window.location.href =
+           "https://autoreelix.beehiiv.com"}
+             className="bg-black text-white px-6 py-3 rounded-lg
+           text-lg font-semibold w-full"
             >
-              Claim My Spot
+             Join the Waitlist
             </button>
-          </form>
+            
+             <p className="mt-2 text-[0.7rem]"> 
+              No spam. Just launch updates. 
+              </p> 
+            </div>
         </div>
 
         {/* Right: “live session” visual with live viewer simulation */}
