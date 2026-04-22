@@ -1,7 +1,9 @@
 "use client";
+import SignupForm from "./components/SignupForm";
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import type React from "react";
 
 const START_SIGNUPS = 327;
 const MAX_RETENTION = 96;
@@ -71,7 +73,7 @@ export default function LandingPage() {
     if (!email) return;
 
     try {
-      const res = await fetch("/api/beehiiv-subscribe", {
+      const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -167,7 +169,8 @@ export default function LandingPage() {
                 Autoreelix
               </span>
               <span className="text-sm text-slate-300">
-                Live Creator OS • Create → Edit → Analyze → Improve → Export → Store
+                Live Creator OS • Create → Edit → Analyze → Improve → Export →
+                Store
               </span>
             </div>
           </div>
@@ -190,8 +193,8 @@ export default function LandingPage() {
             <p className="max-w-xl text-sm text-slate-300 sm:text-base">
               AUTOREELIX is your **live, personal AI producer**—guiding your
               sessions, tracking retention in real time, and auto‑building
-              clips, hooks, and formats that actually perform on TikTok,
-              Reels, Shorts, and beyond. You talk. It orchestrates.
+              clips, hooks, and formats that actually perform on TikTok, Reels,
+              Shorts, and beyond. You talk. It orchestrates.
             </p>
           </div>
 
@@ -500,7 +503,8 @@ export default function LandingPage() {
           <p className="mt-2 text-sm text-slate-300 sm:text-base">
             AUTOREELIX is built around a single, unbreakable loop:
             <span className="font-semibold text-slate-100">
-              {" "}Create → Edit → Analyze → Improve → Export → Store
+              {" "}
+              Create → Edit → Analyze → Improve → Export → Store
             </span>
             . No dead ends. Every action pushes your content forward.
           </p>
@@ -635,9 +639,9 @@ export default function LandingPage() {
                 Creator’s Corner
               </div>
               <p className="text-sm text-slate-200 sm:text-base">
-                A dedicated space inside AUTOREELIX where you can **save
-                winning hooks, frameworks, and session templates**—and remix
-                them whenever you record.
+                A dedicated space inside AUTOREELIX where you can **save winning
+                hooks, frameworks, and session templates**—and remix them
+                whenever you record.
               </p>
               <ul className="space-y-2 text-xs text-slate-300 sm:text-sm">
                 <li>• Pin your best hooks and intros as reusable “openers.”</li>
@@ -662,8 +666,8 @@ export default function LandingPage() {
               </div>
               <p className="text-sm text-slate-200 sm:text-base">
                 Bring a co‑host, editor, or brand partner into your session.
-                SmartOrb keeps track of **who said what**, where the heat
-                spikes, and which moments belong to which person.
+                SmartOrb keeps track of **who said what**, where the heat spikes,
+                and which moments belong to which person.
               </p>
               <ul className="space-y-2 text-xs text-slate-300 sm:text-sm">
                 <li>
@@ -749,9 +753,18 @@ export default function LandingPage() {
               suggests edits and you approve them. Every change is reversible.
             </p>
             <ul className="space-y-2 text-xs text-slate-300 sm:text-sm">
-              <li>• Non‑destructive timeline with deleted scenes and version history.</li>
-              <li>• Async processing with background jobs—UI stays smooth while FFmpeg works.</li>
-              <li>• Before vs after scores, improvement explanations, and confidence indicators.</li>
+              <li>
+                • Non‑destructive timeline with deleted scenes and version
+                history.
+              </li>
+              <li>
+                • Async processing with background jobs—UI stays smooth while
+                FFmpeg works.
+              </li>
+              <li>
+                • Before vs after scores, improvement explanations, and
+                confidence indicators.
+              </li>
             </ul>
             <div className="mt-3 rounded-2xl border border-fuchsia-500/40 bg-black/70 p-3 text-[0.75rem] text-slate-200">
               <div className="mb-1 text-[0.65rem] uppercase tracking-[0.2em] text-fuchsia-200">
@@ -851,7 +864,9 @@ export default function LandingPage() {
             <span>AUTOREELIX — Live Creator OS for Viral Content</span>
           </div>
           <div className="flex flex-wrap items-center gap-4">
-            <span>© {new Date().getFullYear()} AUTOREELIX. All rights reserved.</span>
+            <span>
+              © {new Date().getFullYear()} AUTOREELIX. All rights reserved.
+            </span>
             <span className="hidden h-1 w-1 rounded-full bg-slate-600 md:inline-block" />
             <span className="text-slate-500">
               Built for humans, not algorithms—SmartOrb just speaks both.
@@ -912,6 +927,7 @@ function PlatformCard({ title, role, description, next }: PlatformCardProps) {
     </div>
   );
 }
+
 
 
 
