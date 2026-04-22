@@ -5,7 +5,7 @@ export default function SignupForm() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle");
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("loading");
 
@@ -51,3 +51,4 @@ export default function SignupForm() {
     </form>
   );
 }
+
