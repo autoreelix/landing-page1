@@ -1,9 +1,9 @@
 "use client";
-import SignupForm from "./components/SignupForm";
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import type React from "react";
+import SignupForm from "./components/SignupForm";
 
 const START_SIGNUPS = 327;
 const MAX_RETENTION = 96;
@@ -11,11 +11,9 @@ const MAX_RETENTION = 96;
 export default function LandingPage() {
   const [signups, setSignups] = useState(START_SIGNUPS);
   const [retention, setRetention] = useState(82);
-  const [hoveredFeature, setHoveredFeature] = useState<string | null>(null);
   const [viewers, setViewers] = useState(148);
-  const [streakDays, setStreakDays] = useState(7);
-  const [streakProgress, setStreakProgress] = useState(70);
   const [scrollY, setScrollY] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const signupInterval = setInterval(() => {
@@ -40,17 +38,6 @@ export default function LandingPage() {
       });
     }, 3500);
 
-    const streakInterval = setInterval(() => {
-      setStreakDays((prev) => {
-        const next = Math.min(prev + 1, 30);
-        return next;
-      });
-      setStreakProgress((prev) => {
-        const next = Math.min(prev + Math.random() * 5, 100);
-        return parseFloat(next.toFixed(1));
-      });
-    }, 15000);
-
     const handleScroll = () => {
       setScrollY(window.scrollY);
     };
@@ -60,38 +47,14 @@ export default function LandingPage() {
       clearInterval(signupInterval);
       clearInterval(retentionInterval);
       clearInterval(viewerInterval);
-      clearInterval(streakInterval);
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
-  const handleBeehiivSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const email = (form.elements.namedItem("email") as HTMLInputElement)?.value;
-
-    if (!email) return;
-
-    try {
-      const res = await fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      if (!res.ok) {
-        alert("Something went wrong. Try again in a moment.");
-        return;
-      }
-
-      alert("You’re in. Check your inbox for confirmation.");
-      form.reset();
-    } catch {
-      alert("Connection issue. Please try again.");
-    }
-  };
-
   const parallaxOffset = scrollY * 0.04;
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-black via-slate-950 to-black text-slate-50">
@@ -145,14 +108,17 @@ export default function LandingPage() {
           </button>
         </div>
 
-        <button className="rounded-full bg-gradient-to-r from-fuchsia-500 via-violet-500 to-cyan-400 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-black shadow-[0_0_40px_rgba(236,72,153,0.5)] hover:brightness-110 active:scale-95 transition">
+        <button
+          type="button"
+          onClick={openModal}
+          className="rounded-full bg-gradient-to-r from-fuchsia-500 via-violet-500 to-cyan-400 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-black shadow-[0_0_40px_rgba(236,72,153,0.5)] hover:brightness-110 active:scale-95 transition"
+        >
           Get Early Access
         </button>
       </header>
 
       {/* HERO */}
-      <section className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-16 pt-4 md:flex-row md:items-center md:gap-14 md:px-6 lg:pb-24 lg:pt-10">
-        {/* Left: copy + form */}
+      <section className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-14 pt-4 md:flex-row md:items-center md:gap-14 md:px-6 lg:pb-16 lg:pt-8">
         <div className="flex-1 space-y-7">
           <div className="relative mb-2 inline-flex items-center gap-3">
             <div className="relative h-12 w-12 overflow-hidden rounded-2xl bg-slate-900/80 ring-1 ring-slate-700/60 shadow-[0_0_40px_rgba(15,23,42,1)]">
@@ -169,8 +135,7 @@ export default function LandingPage() {
                 Autoreelix
               </span>
               <span className="text-sm text-slate-300">
-                Live Creator OS • Create → Edit → Analyze → Improve → Export →
-                Store
+                AI creator feedback before you publish
               </span>
             </div>
           </div>
@@ -178,28 +143,38 @@ export default function LandingPage() {
           <div className="inline-flex items-center gap-2 rounded-full border border-slate-700/70 bg-slate-900/70 px-3 py-1 text-xs text-slate-300 backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
             <span className="font-medium uppercase tracking-[0.2em]">
-              Live Creator OS for Viral Content
+              Built for creators who are tired of guessing
             </span>
           </div>
 
           <div className="space-y-4">
             <h1 className="text-balance text-4xl font-semibold tracking-tight text-slate-50 sm:text-5xl lg:text-6xl">
-              Turn every recording into a{" "}
+              Create better content by understanding why your videos{" "}
               <span className="bg-gradient-to-r from-fuchsia-400 via-violet-300 to-cyan-300 bg-clip-text text-transparent">
-                viral‑ready reel
+                succeed or fail
               </span>{" "}
-              while your AI assistant runs the session.
+              before you post.
             </h1>
-            <p className="max-w-xl text-sm text-slate-300 sm:text-base">
-              AUTOREELIX is your **live, personal AI producer**—guiding your
-              sessions, tracking retention in real time, and auto‑building
-              clips, hooks, and formats that actually perform on TikTok, Reels,
-              Shorts, and beyond. You talk. It orchestrates.
+            <p className="max-w-2xl text-sm text-slate-300 sm:text-base">
+              AUTOREELIX is a live creator workspace for coaches, educators,
+              founders, and creators who publish short-form video. SmartOrb gives
+              personalized feedback, content analysis, and improvement guidance
+              while you record so your decisions get sharper before publishing.
             </p>
           </div>
 
-          {/* Metrics row + creator streak meter */}
-          <div className="flex flex-wrap items-center gap-6 text-xs text-slate-300 sm:text-sm">
+          <button
+            type="button"
+            onClick={openModal}
+            className="w-full rounded-full bg-gradient-to-r from-fuchsia-500 via-violet-500 to-cyan-400 px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-black shadow-[0_0_20px_rgba(236,72,153,0.6)] hover:brightness-110 active:scale-95 transition sm:w-auto"
+          >
+            Get Early Access
+          </button>
+          <p className="text-[0.7rem] text-slate-400">
+            No spam. Just early access and launch updates.
+          </p>
+
+          <div className="mt-4 flex flex-wrap items-center gap-6 text-xs text-slate-300 sm:text-sm">
             <div className="space-y-1">
               <div className="text-[0.7rem] uppercase tracking-[0.2em] text-slate-400">
                 Early creators onboarded
@@ -231,61 +206,30 @@ export default function LandingPage() {
             <div className="h-10 w-px bg-slate-800/80" />
             <div className="space-y-1">
               <div className="text-[0.7rem] uppercase tracking-[0.2em] text-slate-400">
-                Creator streak
+                Live session viewers
               </div>
-              <div className="flex items-center gap-2">
-                <div className="flex flex-col">
-                  <span className="text-sm font-semibold tabular-nums">
-                    {streakDays} days
-                  </span>
-                  <span className="text-[0.65rem] text-slate-400">
-                    Recording streak simulation
-                  </span>
-                </div>
-                <div className="relative h-2 w-24 overflow-hidden rounded-full bg-slate-800">
-                  <div
-                    className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-amber-400 via-fuchsia-400 to-emerald-400 transition-all duration-700"
-                    style={{ width: `${streakProgress}%` }}
-                  />
-                </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-semibold tabular-nums">{viewers}</span>
+                <span className="text-xs text-cyan-300">in demo</span>
               </div>
             </div>
           </div>
-
-          {/* Beehiiv form */}
-          <div className="mt-4">
-              <button
-             onClick={() => window.location.href = 
-           "https://autoreelix.beehiiv.com"}
-          className="w-full px-8 py-4 rounded-full text-sm 
-          tracking-widest font-semibold bg-gradient-to-r 
-          from-purple-500 via-blue-500 to-cyan-400 text-white 
-          shadow-[0_0_20px_rgba(124,77,255,0.6)] border 
-          border-white/20 hover:scale-105 
-          hover:shadow-[0_0_30px_rgba(124,77,255,0.9)] 
-          transition-all duration-300 animate-[pulse_2s_infinite]
-         >
-           GET EARLY ACCESS
-          </button>
-            
-             <p className="mt-2 text-[0.7rem]"> 
-              No spam. Just launch updates. 
-              </p> 
-            </div>
         </div>
 
-        {/* Right: “live session” visual with live viewer simulation */}
         <div className="flex-1">
+          <p className="mb-2 text-[0.7rem] uppercase tracking-[0.2em] text-slate-400 text-center md:text-left">
+            Product demonstration preview
+          </p>
           <div className="relative mx-auto max-w-md rounded-3xl border border-slate-800/80 bg-slate-950/80 p-4 shadow-[0_0_60px_rgba(15,23,42,1)] backdrop-blur">
             <div className="mb-3 flex items-center justify-between text-[0.7rem] text-slate-400">
               <div className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span className="uppercase tracking-[0.2em]">
-                  Live Creator Session
+                  SmartOrb Analysis Example
                 </span>
               </div>
               <span className="rounded-full bg-slate-900/80 px-2 py-0.5 text-[0.65rem] text-slate-300">
-                SmartOrb in session
+                Illustrative demo
               </span>
             </div>
 
@@ -297,10 +241,10 @@ export default function LandingPage() {
                     <div className="h-9 w-9 rounded-full bg-gradient-to-br from-fuchsia-500 to-violet-500" />
                     <div className="text-xs">
                       <div className="font-medium text-slate-100">
-                        “Hook Builder” Session
+                        Hook Strength
                       </div>
                       <div className="text-[0.65rem] text-slate-400">
-                        Topic: Turn one idea into 12 viral hooks
+                        Score: 72/100
                       </div>
                     </div>
                   </div>
@@ -325,9 +269,8 @@ export default function LandingPage() {
                     </span>
                   </div>
                   <p>
-                    “Pause here and repeat that line slower—this is your
-                    scroll‑stopping moment. I’ll mark this as a clip and test
-                    three title angles for Shorts.”
+                    Issue: The payoff arrives too late. Suggested improvement:
+                    reveal the outcome earlier to increase viewer curiosity.
                   </p>
                 </div>
 
@@ -335,10 +278,10 @@ export default function LandingPage() {
                   <div className="rounded-xl border border-slate-800 bg-black/60 p-3 hover:border-emerald-400/70 hover:shadow-[0_0_30px_rgba(52,211,153,0.5)] transition">
                     <div className="mb-1 flex items-center justify-between">
                       <span className="text-[0.65rem] uppercase tracking-[0.18em] text-slate-400">
-                        Retention curve
+                        Attention pattern
                       </span>
                       <span className="text-[0.65rem] text-emerald-400">
-                        +18% vs baseline
+                        Drop at 0:09
                       </span>
                     </div>
                     <div className="mt-1 h-16 w-full rounded-md bg-slate-900 overflow-hidden">
@@ -348,16 +291,16 @@ export default function LandingPage() {
                   <div className="rounded-xl border border-slate-800 bg-black/60 p-3 hover:border-fuchsia-400/70 hover:shadow-[0_0_30px_rgba(236,72,153,0.5)] transition">
                     <div className="mb-1 flex items-center justify-between">
                       <span className="text-[0.65rem] uppercase tracking-[0.18em] text-slate-400">
-                        Clip queue
+                        Next action
                       </span>
                       <span className="text-[0.65rem] text-cyan-300">
-                        9 auto‑generated
+                        3 improvements
                       </span>
                     </div>
                     <ul className="space-y-1 text-[0.65rem] text-slate-300">
-                      <li>• “You’re doing this backwards…” hook</li>
-                      <li>• “Stop posting raw screen recordings”</li>
-                      <li>• “The 30‑second retention test”</li>
+                      <li>• Move promise to first sentence</li>
+                      <li>• Cut 2 seconds of setup</li>
+                      <li>• Add one concrete outcome</li>
                     </ul>
                   </div>
                 </div>
@@ -365,428 +308,112 @@ export default function LandingPage() {
                 <div className="mt-1 flex items-center justify-between text-[0.65rem] text-slate-300">
                   <div className="flex items-center gap-2">
                     <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
-                    <span>Recording • Auto‑chapters • Live notes</span>
+                    <span>Demo only • Not real customer data</span>
                   </div>
-                  <button className="rounded-full bg-slate-900/80 px-2 py-1 text-[0.65rem] text-slate-200 hover:bg-slate-800 active:scale-95 transition">
-                    See session summary →
-                  </button>
                 </div>
               </div>
             </div>
           </div>
 
           <p className="mt-3 text-center text-[0.7rem] text-slate-400">
-            AUTOREELIX simulates viewer behavior while you record—so you leave
-            each session with clips that already know how to perform.
+            AUTOREELIX helps you evaluate structure, clarity, and attention
+            before you publish.
           </p>
         </div>
       </section>
 
-      {/* SECTION: What AUTOREELIX actually is */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-16 md:px-6 lg:pb-24">
-        <div className="grid gap-10 md:grid-cols-[1.2fr,1fr] md:items-start">
-          <div className="space-y-5">
-            <h2 className="text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">
-              Not another editor. A live **Creator OS** that thinks in viral
-              formats.
-            </h2>
-            <p className="text-sm text-slate-300 sm:text-base">
-              AUTOREELIX is built for creators who are tired of guessing what
-              will hit. It’s a **live operating system for your recording
-              sessions**—watching your pacing, marking highlights, and
-              structuring your content into clips, carousels, and scripts while
-              you talk.
-            </p>
-            <p className="text-sm text-slate-300 sm:text-base">
-              Instead of dumping raw footage into a timeline, you step into a
-              guided session. Your **personal AI assistant (SmartOrb)** nudges
-              you when you’re onto something, suggests stronger hooks, and
-              quietly builds a library of reusable content assets behind the
-              scenes.
-            </p>
-
-            <div className="grid gap-4 sm:grid-cols-3">
-              <FeaturePill
-                label="Live retention radar"
-                description="See how a real audience would drop or stay—while you’re still recording."
-                onHover={setHoveredFeature}
-              />
-              <FeaturePill
-                label="Auto clip intelligence"
-                description="Moments that spike interest are auto‑tagged, titled, and queued as clips."
-                onHover={setHoveredFeature}
-              />
-              <FeaturePill
-                label="Format‑aware prompts"
-                description="SmartOrb speaks in TikTok, Reels, Shorts, and podcast language—not generic AI."
-                onHover={setHoveredFeature}
-              />
-            </div>
-          </div>
-
-          {/* SmartOrb explanation */}
-          <div className="relative rounded-3xl border border-slate-800/80 bg-slate-950/80 p-5 shadow-[0_0_50px_rgba(15,23,42,1)]">
-            <div className="mb-3 flex items-center justify-between">
-              <div className="text-xs font-medium uppercase tracking-[0.2em] text-slate-400">
-                Meet SmartOrb
-              </div>
-              <div className="rounded-full bg-slate-900/80 px-2 py-1 text-[0.65rem] text-slate-300">
-                Your personal AI assistant
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-4">
-                <div className="relative h-16 w-16">
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-fuchsia-500 via-violet-400 to-cyan-300 blur-md opacity-70 animate-pulse" />
-                  <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-slate-950 ring-2 ring-fuchsia-400/70">
-                    <div className="h-7 w-7 rounded-full bg-gradient-to-br from-fuchsia-300 via-violet-200 to-cyan-200 shadow-[0_0_30px_rgba(129,140,248,0.9)]" />
-                  </div>
-                </div>
-                <p className="flex-1 text-xs text-slate-300 sm:text-sm">
-                  SmartOrb is the **always‑on brain** inside AUTOREELIX. It
-                  listens to your session, tracks energy, and surfaces the
-                  moments that matter—without ever getting in your way.
-                </p>
-              </div>
-
-              <ul className="space-y-2 text-xs text-slate-300 sm:text-sm">
-                <li>
-                  • **Guides your flow** with gentle prompts: “Give me that in
-                  one sentence,” “Try a spicier take,” “Pause—this is a hook.”
-                </li>
-                <li>
-                  • **Understands platforms**: it knows what works on TikTok vs
-                  YouTube Shorts vs Instagram Reels and adjusts suggestions.
-                </li>
-                <li>
-                  • **Builds assets live**: titles, descriptions, timestamps,
-                  and clip ideas are generated while you speak.
-                </li>
-                <li>
-                  • **Feels human**: no robotic walls of text—just short,
-                  timely nudges that feel like a producer in your ear.
-                </li>
-              </ul>
-
-              {hoveredFeature && (
-                <div className="mt-2 rounded-2xl border border-fuchsia-500/40 bg-black/70 p-3 text-[0.7rem] text-slate-200">
-                  <div className="mb-1 text-[0.65rem] uppercase tracking-[0.2em] text-fuchsia-200">
-                    SmartOrb reacts to:
-                  </div>
-                  <p>{hoveredFeature}</p>
-                </div>
-              )}
-            </div>
-          </div>
+      {/* SECTION: Value summary */}
+      <section className="mx-auto w-full max-w-6xl px-4 pb-14 md:px-6 lg:pb-16">
+        <div className="grid gap-4 sm:grid-cols-3 text-xs text-slate-300 sm:text-sm">
+          <ValueCard
+            title="AI Creator Feedback"
+            description="Get pacing, hook, and clarity feedback while recording, not days later."
+          />
+          <ValueCard
+            title="Personalized Analysis"
+            description="Spot where attention drops and why, then get specific changes to test."
+          />
+          <ValueCard
+            title="Better Decisions Before Posting"
+            description="Publish with confidence from structured feedback, not guessing."
+          />
         </div>
       </section>
 
-      {/* SECTION: Core loop */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-16 md:px-6 lg:pb-24">
+      {/* SECTION: Differentiation */}
+      <section className="mx-auto w-full max-w-6xl px-4 pb-14 md:px-6 lg:pb-16">
         <div className="mb-6 text-center">
           <h2 className="text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">
-            One loop. Every feature feeds it.
+            How AUTOREELIX is different
           </h2>
           <p className="mt-2 text-sm text-slate-300 sm:text-base">
-            AUTOREELIX is built around a single, unbreakable loop:
-            <span className="font-semibold text-slate-100">
-              {" "}
-              Create → Edit → Analyze → Improve → Export → Store
-            </span>
-            . No dead ends. Every action pushes your content forward.
+            Most tools help after recording. AUTOREELIX helps you make better
+            content decisions before publishing.
           </p>
         </div>
-
-        <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-3 text-xs text-slate-200 sm:text-sm">
-          {["Create", "Edit", "Analyze", "Improve", "Export", "Store"].map(
-            (step, idx, arr) => (
-              <div key={step} className="flex items-center gap-3">
-                <div className="rounded-full border border-slate-700/80 bg-slate-950/80 px-4 py-2 shadow-[0_0_25px_rgba(15,23,42,1)] hover:border-fuchsia-400/80 hover:shadow-[0_0_30px_rgba(236,72,153,0.6)] active:scale-95 transition">
-                  <span className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-slate-400">
-                    {step}
-                  </span>
-                </div>
-                {idx < arr.length - 1 && (
-                  <span className="text-slate-500">➜</span>
-                )}
-              </div>
-            )
-          )}
-        </div>
-
-        <div className="mt-8 grid gap-4 sm:grid-cols-3 text-xs text-slate-300 sm:text-sm">
-          <div className="rounded-2xl border border-slate-800 bg-slate-950/80 p-4 hover:border-cyan-400/70 hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] transition">
-            <div className="text-[0.7rem] uppercase tracking-[0.2em] text-slate-400 mb-1">
-              Create & Edit
-            </div>
-            <p>
-              Capture ideas in **Viral Lab**, then refine them in **Studio** with
-              manual controls, full AI edits, or a hybrid of both.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-slate-800 bg-slate-950/80 p-4 hover:border-emerald-400/70 hover:shadow-[0_0_30px_rgba(52,211,153,0.5)] transition">
-            <div className="text-[0.7rem] uppercase tracking-[0.2em] text-slate-400 mb-1">
-              Analyze & Improve
-            </div>
-            <p>
-              **Performance Lab** runs deep analysis, compares before vs after,
-              and lets SmartOrb coach you toward better results.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-slate-800 bg-slate-950/80 p-4 hover:border-fuchsia-400/70 hover:shadow-[0_0_30px_rgba(236,72,153,0.5)] transition">
-            <div className="text-[0.7rem] uppercase tracking-[0.2em] text-slate-400 mb-1">
-              Export & Store
-            </div>
-            <p>
-              Export finished assets, then archive everything in **Vault**—clips,
-              scripts, thumbnails, and deleted scenes—without losing a single
-              version.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION: Core platform map */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-16 md:px-6 lg:pb-24">
-        <div className="mb-6 text-center">
-          <h2 className="text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">
-            The AUTOREELIX map: one purpose per room.
-          </h2>
-          <p className="mt-2 text-sm text-slate-300 sm:text-base">
-            Every section has a single job and always points you to the next
-            step in the loop.
-          </p>
-        </div>
-
-        <div className="grid gap-5 md:grid-cols-3 text-xs text-slate-300 sm:text-sm">
-          <PlatformCard
-            title="Dashboard"
-            role="Your command center"
-            description="See live session stats, retention trends, credits, and what SmartOrb wants you to do next."
-            next="Jump into Viral Lab or resume an in‑progress project."
+        <div className="grid gap-4 md:grid-cols-3 text-xs text-slate-300 sm:text-sm">
+          <ComparisonCard
+            title="Traditional Editors"
+            description="Great at cutting footage after recording, but they do not explain why a message may underperform."
           />
-          <PlatformCard
-            title="Viral Lab"
-            role="Content creation"
-            description="Generate hooks, scripts, and content ideas using OpenAI—tuned for TikTok, Reels, Shorts, and podcasts."
-            next="Send winning ideas straight into Studio for recording and editing."
+          <ComparisonCard
+            title="AI Generators"
+            description="Help create more drafts quickly, but often without context from your delivery and audience attention."
           />
-          <PlatformCard
-            title="Studio"
-            role="Editing"
-            description="Hybrid editor: manual mode, full AI, or a blend of both. Non‑destructive timeline, deleted scenes, and FFmpeg‑powered processing."
-            next="Push finished cuts into Performance Lab for analysis."
-          />
-          <PlatformCard
-            title="Performance Lab"
-            role="Analysis + improvement"
-            description="OpenAI analysis + coaching: before vs after scores, improvement breakdowns, and confidence indicators for every change."
-            next="Send optimized versions to Export or back to Studio for another pass."
-          />
-          <PlatformCard
-            title="TrendPulse"
-            role="Trends + discovery"
-            description="NewsAPI + platform signals surface trending topics, sounds, and angles that match your niche."
-            next="Turn trends into scripts in Viral Lab in one click."
-          />
-          <PlatformCard
-            title="Creators Corner"
-            role="Community"
-            description="Save frameworks, share formats, and learn from other creators’ winning sessions—without leaking your raw files."
-            next="Pull proven templates into your next live session."
-          />
-          <PlatformCard
-            title="Vault"
-            role="Storage"
-            description="Backed by Supabase + Cloudflare R2 + Cloudinary. Every asset, version, and deleted scene stays accessible."
-            next="Re‑use, remix, or feed old assets into the Legendary System."
+          <ComparisonCard
+            title="AUTOREELIX"
+            description="Combines SmartOrb guidance, creator-aware analysis, and practical improvements while your session is still live."
+            highlighted
           />
         </div>
       </section>
 
-      {/* SECTION: Creator’s Corner & Collab Mode */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-16 md:px-6 lg:pb-24">
-        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <h2 className="text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">
-            Creator’s Corner & Collab Mode
-          </h2>
-          <p className="max-w-md text-xs text-slate-400 sm:text-sm">
-            AUTOREELIX isn’t just a tool—it’s a **live space** where creators
-            refine ideas together, share formats, and co‑build sessions that
-            actually ship.
-          </p>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2">
-          <div className="relative overflow-hidden rounded-3xl border border-slate-800/80 bg-slate-950/80 p-5 hover:border-cyan-400/70 hover:shadow-[0_0_40px_rgba(34,211,238,0.5)] transition">
-            <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-gradient-to-br from-fuchsia-500/25 to-violet-500/10 blur-3xl" />
-            <div className="relative space-y-3">
-              <div className="inline-flex items-center gap-2 rounded-full bg-slate-900/80 px-3 py-1 text-[0.65rem] uppercase tracking-[0.2em] text-slate-300">
-                <span className="h-1.5 w-1.5 rounded-full bg-cyan-300" />
-                Creator’s Corner
-              </div>
-              <p className="text-sm text-slate-200 sm:text-base">
-                A dedicated space inside AUTOREELIX where you can **save winning
-                hooks, frameworks, and session templates**—and remix them
-                whenever you record.
-              </p>
-              <ul className="space-y-2 text-xs text-slate-300 sm:text-sm">
-                <li>• Pin your best hooks and intros as reusable “openers.”</li>
-                <li>
-                  • Store swipe‑worthy carousels, scripts, and content skeletons
-                  for future sessions.
-                </li>
-                <li>
-                  • Let SmartOrb suggest which of your saved formats fits the
-                  topic you’re recording today.
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="relative overflow-hidden rounded-3xl border border-slate-800/80 bg-slate-950/80 p-5 hover:border-fuchsia-400/70 hover:shadow-[0_0_40px_rgba(236,72,153,0.5)] transition">
-            <div className="absolute -left-10 -bottom-10 h-40 w-40 rounded-full bg-gradient-to-tr from-cyan-400/25 to-violet-500/10 blur-3xl" />
-            <div className="relative space-y-3">
-              <div className="inline-flex items-center gap-2 rounded-full bg-slate-900/80 px-3 py-1 text-[0.65rem] uppercase tracking-[0.2em] text-slate-300">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
-                Collab Mode
-              </div>
-              <p className="text-sm text-slate-200 sm:text-base">
-                Bring a co‑host, editor, or brand partner into your session.
-                SmartOrb keeps track of **who said what**, where the heat spikes,
-                and which moments belong to which person.
-              </p>
-              <ul className="space-y-2 text-xs text-slate-300 sm:text-sm">
-                <li>
-                  • Shared live notes and clip markers visible to everyone in
-                  the session.
-                </li>
-                <li>
-                  • Role‑aware suggestions: “Let your co‑host react here,”
-                  “Pause for a stitchable moment.”
-                </li>
-                <li>
-                  • Export a shared clip board so your editor or team can move
-                  straight into production.
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION: AI engine, hybrid editor, video system */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-16 md:px-6 lg:pb-24">
-        <div className="grid gap-8 lg:grid-cols-[1.2fr,1fr]">
-          <div className="space-y-4">
-            <h2 className="text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">
-              A stacked AI engine that never ships weak output.
-            </h2>
-            <p className="text-sm text-slate-300 sm:text-base">
-              AUTOREELIX routes every request through a **quality‑first AI
-              system**: if an output is weak, it’s auto‑improved before you ever
-              see it.
-            </p>
-
-            <div className="grid gap-3 sm:grid-cols-2 text-xs text-slate-300 sm:text-sm">
-              <div className="rounded-2xl border border-slate-800 bg-slate-950/80 p-4 hover:border-fuchsia-400/70 hover:shadow-[0_0_30px_rgba(236,72,153,0.5)] transition">
-                <div className="text-[0.7rem] uppercase tracking-[0.2em] text-slate-400 mb-1">
-                  OpenAI
-                </div>
-                <p>
-                  Hooks, scripts, analysis, assistant, and coaching—tuned for
-                  creators, not generic chat. Every response passes a quality
-                  check before it hits your screen.
-                </p>
-              </div>
-              <div className="rounded-2xl border border-slate-800 bg-slate-950/80 p-4 hover:border-cyan-400/70 hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] transition">
-                <div className="text-[0.7rem] uppercase tracking-[0.2em] text-slate-400 mb-1">
-                  Runway & Kling
-                </div>
-                <p>
-                  Runway as the **default** video engine for balanced cost.
-                  Kling as the **premium** tier for cinematic, high‑end outputs.
-                  Pexels fills gaps with stock footage when needed.
-                </p>
-              </div>
-              <div className="rounded-2xl border border-slate-800 bg-slate-950/80 p-4 hover:border-emerald-400/70 hover:shadow-[0_0_30px_rgba(52,211,153,0.5)] transition">
-                <div className="text-[0.7rem] uppercase tracking-[0.2em] text-slate-400 mb-1">
-                  ElevenLabs & audio
-                </div>
-                <p>
-                  ElevenLabs powers voice generation and replacement. FFmpeg
-                  handles non‑destructive edits, deleted scenes, and
-                  export‑ready audio.
-                </p>
-              </div>
-              <div className="rounded-2xl border border-slate-800 bg-slate-950/80 p-4 hover:border-violet-400/70 hover:shadow-[0_0_30px_rgba(129,140,248,0.5)] transition">
-                <div className="text-[0.7rem] uppercase tracking-[0.2em] text-slate-400 mb-1">
-                  TrendPulse brain
-                </div>
-                <p>
-                  NewsAPI + platform signals feed TrendPulse so your ideas are
-                  always anchored to what’s moving **right now**.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-4 rounded-3xl border border-slate-800 bg-slate-950/80 p-5">
+      {/* SECTION: Trust + Founder story */}
+      <section className="mx-auto w-full max-w-6xl px-4 pb-16 md:px-6 lg:pb-20">
+        <div className="grid gap-5 lg:grid-cols-2">
+          <div className="rounded-3xl border border-slate-800/80 bg-slate-950/80 p-5 shadow-[0_0_40px_rgba(15,23,42,1)]">
             <div className="text-[0.7rem] uppercase tracking-[0.2em] text-slate-400">
-              Studio • Hybrid editor
+              Honest product stance
             </div>
-            <p className="text-sm text-slate-200 sm:text-base">
-              Choose **Manual Mode**, **Full AI**, or a **Hybrid** where SmartOrb
-              suggests edits and you approve them. Every change is reversible.
+            <h3 className="mt-2 text-xl font-semibold tracking-tight text-slate-50">
+              Built for clarity, not algorithm myths
+            </h3>
+            <p className="mt-3 text-sm text-slate-300 sm:text-base">
+              AUTOREELIX does not claim to know secret platform algorithms. It
+              helps creators analyze content structure, audience attention
+              patterns, and improvement opportunities before publishing.
             </p>
-            <ul className="space-y-2 text-xs text-slate-300 sm:text-sm">
-              <li>
-                • Non‑destructive timeline with deleted scenes and version
-                history.
-              </li>
-              <li>
-                • Async processing with background jobs—UI stays smooth while
-                FFmpeg works.
-              </li>
-              <li>
-                • Before vs after scores, improvement explanations, and
-                confidence indicators.
-              </li>
-            </ul>
-            <div className="mt-3 rounded-2xl border border-fuchsia-500/40 bg-black/70 p-3 text-[0.75rem] text-slate-200">
-              <div className="mb-1 text-[0.65rem] uppercase tracking-[0.2em] text-fuchsia-200">
-                Output quality system
-              </div>
-              <p>
-                If a script, clip, or edit doesn’t meet the bar, AUTOREELIX
-                quietly re‑runs and improves it. You never see the weak
-                version—only the best attempt.
-              </p>
+          </div>
+
+          <div className="rounded-3xl border border-slate-800/80 bg-slate-950/80 p-5 shadow-[0_0_40px_rgba(15,23,42,1)]">
+            <div className="text-[0.7rem] uppercase tracking-[0.2em] text-slate-400">
+              Why this was built
             </div>
+            <h3 className="mt-2 text-xl font-semibold tracking-tight text-slate-50">
+              From creator frustration to creator feedback
+            </h3>
+            <p className="mt-3 text-sm text-slate-300 sm:text-base">
+              AUTOREELIX exists because creators are tired of posting blind and
+              guessing what failed. The mission is simple: help creators improve
+              faster with actionable feedback inside the workflow they already
+              use.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* SECTION: Why now / FOMO */}
+      {/* SECTION: Why now / FOMO + final CTA */}
       <section className="mx-auto w-full max-w-6xl px-4 pb-20 md:px-6 lg:pb-24">
-        <div className="rounded-3xl border border-fuchsia-500/40 bg-gradient-to-r from-slate-950 via-slate-950 to-slate-900 p-6 shadow-[0_0_60px_rgba(236,72,153,0.35)]">
+        <div className="rounded-3xl border border-fuchsia-500/40 bg-gradient-to-r from-slate-950 via-slate-950 to-slate-900 p-6 shadow-[0_0_60px_rgba(236,72,153,0.35)] space-y-8">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div className="max-w-xl space-y-3">
               <h3 className="text-xl font-semibold tracking-tight text-slate-50 sm:text-2xl">
-                The creators who win the next 12 months will **treat recording
-                like a live lab**, not a guessing game.
+                Ready to stop guessing before you post?
               </h3>
               <p className="text-sm text-slate-200 sm:text-base">
-                AUTOREELIX is built for that new wave: creators who want to
-                **measure retention while they talk**, test hooks in real time,
-                and leave every session with a stack of content that already
-                knows how to perform.
-              </p>
-              <p className="text-sm text-slate-200 sm:text-base">
-                Early access isn’t just “getting in first.” It means your
-                content, your patterns, and your feedback shape how SmartOrb
-                thinks about creators. The system literally learns from you.
+                Join early access to shape AUTOREELIX with your real creator
+                workflow. Get launch invites, product updates, and first access
+                to SmartOrb feedback features.
               </p>
             </div>
 
@@ -825,9 +452,15 @@ export default function LandingPage() {
                   </div>
                 </div>
               </div>
-              <button className="mt-2 w-full rounded-xl bg-gradient-to-r from-fuchsia-500 via-violet-500 to-cyan-400 px-4 py-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-black hover:brightness-110 active:scale-95 transition">
-                Join the first wave
+
+              <button
+                type="button"
+                onClick={openModal}
+                className="w-full rounded-xl bg-gradient-to-r from-fuchsia-500 via-violet-500 to-cyan-400 px-4 py-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-black hover:brightness-110 active:scale-95 transition"
+              >
+                Get Early Access
               </button>
+
               <p className="text-[0.65rem] text-slate-400">
                 You’ll get: early access invites, behind‑the‑scenes build notes,
                 and first dibs on creator‑only features.
@@ -862,59 +495,102 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* Modal with existing SignupForm */}
+      <EarlyAccessModal isOpen={isModalOpen} onClose={closeModal}>
+        <div className="space-y-3 text-center">
+          <h2 className="text-xl font-semibold text-slate-50">
+            Join Early Access
+          </h2>
+          <p className="text-sm text-slate-300">
+            Be first to use AUTOREELIX before launch. No spam—just early access
+            and build notes.
+          </p>
+        </div>
+        <div className="mt-4">
+          <SignupForm />
+        </div>
+      </EarlyAccessModal>
     </main>
   );
 }
 
-type FeaturePillProps = {
-  label: string;
-  description: string;
-  onHover: (text: string | null) => void;
-};
-
-function FeaturePill({ label, description, onHover }: FeaturePillProps) {
-  return (
-    <button
-      type="button"
-      onMouseEnter={() => onHover(description)}
-      onMouseLeave={() => onHover(null)}
-      onTouchStart={() => onHover(description)}
-      onTouchEnd={() => onHover(null)}
-      className="group flex h-full flex-col justify-between rounded-2xl border border-slate-800 bg-slate-950/80 p-3 text-left text-xs text-slate-200 shadow-[0_0_30px_rgba(15,23,42,1)] transition hover:border-fuchsia-400/70 hover:bg-slate-900/80 hover:shadow-[0_0_35px_rgba(236,72,153,0.6)] active:scale-95"
-    >
-      <span className="mb-2 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-slate-400 group-hover:text-fuchsia-300">
-        {label}
-      </span>
-      <span className="text-[0.75rem] text-slate-300">{description}</span>
-    </button>
-  );
-}
-
-type PlatformCardProps = {
+type ValueCardProps = {
   title: string;
-  role: string;
   description: string;
-  next: string;
 };
 
-function PlatformCard({ title, role, description, next }: PlatformCardProps) {
+function ValueCard({ title, description }: ValueCardProps) {
   return (
     <div className="flex h-full flex-col justify-between rounded-2xl border border-slate-800 bg-slate-950/80 p-4 shadow-[0_0_30px_rgba(15,23,42,1)] hover:border-cyan-400/70 hover:shadow-[0_0_35px_rgba(34,211,238,0.6)] active:scale-95 transition">
       <div>
         <div className="text-[0.7rem] uppercase tracking-[0.2em] text-slate-400">
           {title}
         </div>
-        <div className="mt-1 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-fuchsia-300">
-          {role}
-        </div>
         <p className="mt-2 text-[0.8rem] text-slate-300">{description}</p>
       </div>
-      <p className="mt-3 text-[0.7rem] text-slate-400">
-        Next: <span className="text-slate-200">{next}</span>
-      </p>
     </div>
   );
 }
+
+type ComparisonCardProps = {
+  title: string;
+  description: string;
+  highlighted?: boolean;
+};
+
+function ComparisonCard({
+  title,
+  description,
+  highlighted = false,
+}: ComparisonCardProps) {
+  return (
+    <div
+      className={`rounded-2xl border p-4 text-left shadow-[0_0_25px_rgba(15,23,42,1)] transition ${
+        highlighted
+          ? "border-fuchsia-500/60 bg-slate-900/80"
+          : "border-slate-800 bg-slate-950/80"
+      }`}
+    >
+      <div className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-slate-400">
+        {title}
+      </div>
+      <p className="mt-2 text-[0.8rem] text-slate-300">{description}</p>
+    </div>
+  );
+}
+
+type EarlyAccessModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+};
+
+function EarlyAccessModal({ isOpen, onClose, children }: EarlyAccessModalProps) {
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-md rounded-3xl border border-slate-800 bg-slate-950 p-6 shadow-[0_0_50px_rgba(15,23,42,1)]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-4 top-4 rounded-full bg-slate-900 px-2 py-1 text-xs text-slate-400 hover:bg-slate-800 hover:text-slate-200"
+        >
+          Close
+        </button>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 
 
 
