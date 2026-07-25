@@ -42,7 +42,7 @@ export default function SignupForm() {
       </button>
 
       {status === "success" && (
-        <p className="text-green-500 text-sm">You're in! Check your email.</p>
+        <p className="text-green-500 text-sm">You&apos;re in! Check your email.</p>
       )}
 
       {status === "error" && (
