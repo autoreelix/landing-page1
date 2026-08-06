@@ -166,7 +166,7 @@ export default function LandingPage() {
       <header className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-6 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3">
           <div className="relative h-12 w-12 overflow-hidden rounded-2xl border border-slate-800 bg-slate-950/80 shadow-[0_0_40px_rgba(15,23,42,1)]">
-            <Image src="/Copilot_20260409_112446.png" alt="AUTOREELIX logo" fill className="object-cover" priority />
+            <Image src="/logo.png" alt="AUTOREELIX logo" fill className="object-cover" priority />
           </div>
           <div className="leading-tight">
             <div className="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-slate-400">Creator Intelligence System</div>
@@ -251,7 +251,7 @@ export default function LandingPage() {
                 <div className="relative">
                   <div className="absolute inset-0 rounded-full bg-cyan-300/30 blur-xl" />
                   <div className="relative flex h-28 w-28 items-center justify-center rounded-full border border-slate-200/20 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.24),rgba(34,211,238,0.10)_35%,rgba(2,6,23,0.96)_78%)] shadow-[0_0_60px_rgba(34,211,238,0.18)]">
-                    <Image src="/Copilot_20260409_112446.png" alt="AUTOREELIX logo inside SmartOrb" fill className="rounded-full object-cover p-5" />
+                    <Image src="/logo.png" alt="AUTOREELIX logo inside SmartOrb" fill className="rounded-full object-cover p-5" />
                   </div>
                 </div>
                 <div>
@@ -348,7 +348,7 @@ export default function LandingPage() {
             <div className="mt-4 rounded-[1.5rem] border border-slate-800 bg-[radial-gradient(circle_at_top_left,rgba(217,70,239,0.12),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(34,211,238,0.10),transparent_32%),linear-gradient(145deg,rgba(15,23,42,0.9),rgba(2,6,23,0.98))] p-5">
               <div className="flex items-center gap-3">
                 <div className="relative h-12 w-12 rounded-full border border-slate-200/10 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.18),rgba(34,211,238,0.16)_35%,rgba(2,6,23,0.95)_80%)] shadow-[0_0_35px_rgba(34,211,238,0.18)]">
-                  <Image src="/Copilot_20260409_112446.png" alt="SmartOrb icon" fill className="rounded-full object-cover p-2" />
+                  <Image src="/logo.png" alt="SmartOrb icon" fill className="rounded-full object-cover p-2" />
                 </div>
                 <div>
                   <div className="text-sm font-semibold text-slate-50">SmartOrb</div>
@@ -446,7 +446,7 @@ export default function LandingPage() {
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-6 text-sm text-slate-500 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
           <div className="flex items-center gap-3">
             <div className="relative h-7 w-7 overflow-hidden rounded-lg border border-slate-800 bg-slate-950/80">
-              <Image src="/Copilot_20260409_112446.png" alt="AUTOREELIX logo small" fill className="object-cover" />
+              <Image src="/logo.png" alt="AUTOREELIX logo small" fill className="object-cover" />
             </div>
             <span>AUTOREELIX | SmartOrb for creators who want better decisions</span>
           </div>
