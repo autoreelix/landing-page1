@@ -27,7 +27,7 @@ export default function LegalPageShell({
       <header className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-6 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-3 transition hover:opacity-90">
           <div className="relative h-12 w-12 overflow-hidden rounded-2xl border border-slate-800 bg-slate-950/80 shadow-[0_0_40px_rgba(15,23,42,1)]">
-            <Image src="/Copilot_20260409_112446.png" alt="AUTOREELIX logo" fill className="object-cover" priority />
+            <Image src="/logo.png" alt="AUTOREELIX logo" fill className="object-cover" priority />
           </div>
           <div className="leading-tight">
             <div className="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-slate-400">
@@ -82,7 +82,7 @@ export default function LegalPageShell({
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-6 text-sm text-slate-500 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
           <div className="flex items-center gap-3">
             <div className="relative h-7 w-7 overflow-hidden rounded-lg border border-slate-800 bg-slate-950/80">
-              <Image src="/Copilot_20260409_112446.png" alt="AUTOREELIX logo small" fill className="object-cover" />
+              <Image src="/logo.png" alt="AUTOREELIX logo small" fill className="object-cover" />
             </div>
             <span>AUTOREELIX | SmartOrb for creators who want better decisions</span>
           </div>
